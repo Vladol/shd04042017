@@ -1,106 +1,9 @@
--- Adminer 4.2.2 MySQL dump
+-- Adminer 4.2.1 MySQL dump
 
 SET NAMES utf8;
 SET time_zone = '+00:00';
 SET foreign_key_checks = 0;
 SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
-
-DROP TABLE IF EXISTS `apns_devices`;
-CREATE TABLE `apns_devices` (
-  `pid` int(9) unsigned NOT NULL AUTO_INCREMENT,
-  `clientid` varchar(64) NOT NULL,
-  `appname` varchar(255) NOT NULL,
-  `appversion` varchar(25) DEFAULT NULL,
-  `deviceuid` char(40) NOT NULL,
-  `devicetoken` char(164) NOT NULL,
-  `devicename` varchar(255) NOT NULL,
-  `devicemodel` varchar(100) NOT NULL,
-  `deviceversion` varchar(25) NOT NULL,
-  `pushbadge` enum('disabled','enabled') DEFAULT 'disabled',
-  `pushalert` enum('disabled','enabled') DEFAULT 'disabled',
-  `pushsound` enum('disabled','enabled') DEFAULT 'disabled',
-  `development` enum('production','sandbox') CHARACTER SET latin1 NOT NULL DEFAULT 'production',
-  `status` enum('active','uninstalled') NOT NULL DEFAULT 'active',
-  `created` datetime NOT NULL,
-  `modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`pid`),
-  UNIQUE KEY `appname` (`appname`,`appversion`,`deviceuid`),
-  KEY `clientid` (`clientid`),
-  KEY `devicetoken` (`devicetoken`),
-  KEY `devicename` (`devicename`),
-  KEY `devicemodel` (`devicemodel`),
-  KEY `deviceversion` (`deviceversion`),
-  KEY `pushbadge` (`pushbadge`),
-  KEY `pushalert` (`pushalert`),
-  KEY `pushsound` (`pushsound`),
-  KEY `development` (`development`),
-  KEY `status` (`status`),
-  KEY `created` (`created`),
-  KEY `modified` (`modified`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Store unique devices';
-
-
-DROP TABLE IF EXISTS `apns_messages`;
-CREATE TABLE `apns_messages` (
-  `pid` int(9) unsigned NOT NULL AUTO_INCREMENT,
-  `clientid` varchar(64) NOT NULL,
-  `fk_device` int(9) unsigned NOT NULL,
-  `message` varchar(255) NOT NULL,
-  `delivery` datetime NOT NULL,
-  `status` enum('queued','delivered','failed') CHARACTER SET latin1 NOT NULL DEFAULT 'queued',
-  `created` datetime NOT NULL,
-  `modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`pid`),
-  KEY `clientid` (`clientid`),
-  KEY `fk_device` (`fk_device`),
-  KEY `status` (`status`),
-  KEY `created` (`created`),
-  KEY `modified` (`modified`),
-  KEY `message` (`message`),
-  KEY `delivery` (`delivery`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Messages to push to APNS';
-
-
-DROP TABLE IF EXISTS `c2dm_devices`;
-CREATE TABLE `c2dm_devices` (
-  `clientid` varchar(64) NOT NULL,
-  `appname` varchar(128) NOT NULL,
-  `deviceid` varchar(255) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
-  `imei` varchar(50) NOT NULL,
-  `status` enum('active','uninstalled') NOT NULL DEFAULT 'active',
-  `created` datetime NOT NULL,
-  `modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  `pid` int(11) NOT NULL,
-  PRIMARY KEY (`appname`,`imei`),
-  UNIQUE KEY `appname` (`appname`,`deviceid`),
-  KEY `clientid` (`clientid`),
-  KEY `imei` (`imei`),
-  KEY `status` (`status`),
-  KEY `created` (`created`),
-  KEY `modified` (`modified`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Store unique devices';
-
-
-DROP TABLE IF EXISTS `c2dm_messages`;
-CREATE TABLE `c2dm_messages` (
-  `pid` int(9) unsigned NOT NULL AUTO_INCREMENT,
-  `clientid` varchar(64) NOT NULL,
-  `fk_device` varchar(50) NOT NULL,
-  `message` varchar(255) NOT NULL,
-  `delivery` datetime NOT NULL,
-  `status` enum('queued','delivered','failed') CHARACTER SET latin1 NOT NULL DEFAULT 'queued',
-  `created` datetime NOT NULL,
-  `modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`pid`),
-  KEY `clientid` (`clientid`),
-  KEY `fk_device` (`fk_device`),
-  KEY `status` (`status`),
-  KEY `created` (`created`),
-  KEY `modified` (`modified`),
-  KEY `message` (`message`),
-  KEY `delivery` (`delivery`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Messages to push to C2DM';
-
 
 DROP TABLE IF EXISTS `engine4_activity_actions`;
 CREATE TABLE `engine4_activity_actions` (
@@ -1919,35 +1822,6 @@ CREATE TABLE `engine4_poll_votes` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-DROP TABLE IF EXISTS `engine4_push_log`;
-CREATE TABLE `engine4_push_log` (
-  `log_id` int(11) NOT NULL AUTO_INCREMENT,
-  `conversation_id` int(11) NOT NULL,
-  `message_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `sender_id` int(11) NOT NULL DEFAULT '0',
-  `status` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-DROP TABLE IF EXISTS `engine4_push_notices`;
-CREATE TABLE `engine4_push_notices` (
-  `id_push` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `push_number` int(11) unsigned NOT NULL,
-  `user_id` int(11) unsigned NOT NULL,
-  `title` varchar(34) NOT NULL,
-  `body` varchar(256) NOT NULL,
-  `button_link` varchar(104) DEFAULT NULL,
-  `button_title` varchar(34) DEFAULT NULL,
-  `second_button_link` varchar(104) DEFAULT NULL,
-  `second_button_title` varchar(34) DEFAULT NULL,
-  `is_sent` tinyint(1) NOT NULL,
-  `creation_date` datetime NOT NULL,
-  PRIMARY KEY (`id_push`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
 DROP TABLE IF EXISTS `engine4_seaocores`;
 CREATE TABLE `engine4_seaocores` (
   `seaocores_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -2534,4 +2408,4 @@ CREATE TABLE `engine4_video_videos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
--- 2017-04-04 11:26:45
+-- 2017-04-04 11:28:49
